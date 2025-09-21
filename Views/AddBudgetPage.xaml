@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+    
+<!--
+    AddBudgetPage.xaml
+    
+    This page provides a form for creating a new Budget.
+    It binds to the AddBudgetPageViewModel (BudgetViewModel in code-behind),
+    and supports selecting a category, entering an amount, setting a period,
+    and saving/canceling the entry.
+-->
+    
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoMoney.Views.AddBudgetPage"
+             Title="Add Budget">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Category selection -->
+            <Label Text="Category" FontSize="14" />
+            <Picker ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory}"
+                    Title="Select category" />
+
+            <!-- Add new category -->
+            <HorizontalStackLayout Spacing="10">
+                <Entry x:Name="NewCategoryEntry"
+                   Placeholder="Add new category"
+                   HorizontalOptions="FillAndExpand" />
+                <Button Text="Add"
+                Command="{Binding AddCategoryCommand}"
+                CommandParameter="{Binding Text, Source={x:Reference NewCategoryEntry}}" />
+            </HorizontalStackLayout>
+
+            <!-- Budget amount entry (numeric input, uses CurrencyConverter) -->
+            <Label Text="Amount" FontSize="14" />
+            <Entry Placeholder="Enter amount"
+                   Keyboard="Numeric"
+                   Text="{Binding FormAmount, Mode=TwoWay, Converter={StaticResource CurrencyConverter}}" />
+
+            <!-- Period -->
+            <Label Text="Period" FontSize="14" />
+            <Entry Placeholder="e.g. Monthly"
+                   Text="{Binding FormPeriod}" />
+
+            <!-- Buttons -->
+            <HorizontalStackLayout Spacing="15" Margin="0,20,0,0">
+                <!-- Save budget button - bound to AddBudgetCommand -->
+                <Button Text="Save"
+                        Command="{Binding AddBudgetCommand}"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="{AppThemeBinding Light=#2196F3, Dark=#1976D2}"
+                        TextColor="White"
+                        CornerRadius="8" />
+                <!-- Cancel button - bound to CancelCommand -->
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="LightGray"
+                        TextColor="Black"
+                        CornerRadius="8" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

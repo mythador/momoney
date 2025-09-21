@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  MainPage.xaml
+  
+  Defines the main landing page for the MoMoney application.
+  Provides navigation buttons to Transactions, Budgets, and Reports pages,
+  along with a welcome message and app branding.
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoMoney.MainPage"
+             Title="MoMoney">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <!--
+              App Title
+              
+              Displays the main app name and tagline at the top of the page.
+            -->
+            <Label Text="Welcome to Mo Money 💰"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Your personal finance tracker"
+                   FontSize="18"
+                   HorizontalOptions="Center" />
+
+            <!-- Divider -->
+            <BoxView HeightRequest="2" Color="Gray" Margin="0,10" />
+
+            <!--
+              Navigation Buttons
+              
+              Buttons that allow users to navigate to core app sections:
+              Transactions, Budgets, and Reports.
+            -->
+            <Button Text="View Transactions"
+                    Command="{Binding GoToTransactionsCommand}"
+                    HeightRequest="50"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10" />
+
+            <Button Text="View Budgets"
+                    Command="{Binding GoToBudgetsCommand}"
+                    HeightRequest="50"
+                    BackgroundColor="#2196F3"
+                    TextColor="White"
+                    CornerRadius="10" />
+
+            <Button Text="View Reports"
+                    Command="{Binding GoToReportsCommand}"
+                    HeightRequest="50"
+                    BackgroundColor="#9C27B0"
+                    TextColor="White"
+                    CornerRadius="10" />
+
+            <!--
+              Logo Image
+              
+              Displays the MoMoney logo or branding image centered at the bottom.
+            -->
+                <Image Source="momoney.jpg"
+               HeightRequest="250"
+               Aspect="AspectFit"
+               HorizontalOptions="Center" />
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

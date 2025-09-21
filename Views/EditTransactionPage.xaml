@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  EditTransactionPage.xaml
+  
+  Provides a form for editing an existing transaction.
+  Binds to EditTransactionViewModel, supporting:
+    - Editing amount, category, notes, type (income/expense), and date
+    - Saving changes
+    - Deleting the transaction
+    - Cancelling without saving
+  Uses CurrencyConverter to format the transaction amount field.
+-->
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoMoney.Views.EditTransactionPage"
+             Title="Edit Transaction">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Page heading -->
+            <Label Text="Transaction Details"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10" />
+
+            <!-- Amount entry (numeric input, formatted using CurrencyConverter) -->
+            <Label Text="Amount" FontAttributes="Bold" />
+            <Entry Placeholder="Amount"
+                   Keyboard="Numeric"
+                   Text="{Binding FormAmount, Mode=TwoWay, Converter={StaticResource CurrencyConverter}}" />
+
+            <!-- Category selection -->
+            <Label Text="Category" FontAttributes="Bold" />
+            <Picker Title="Select Category"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" />
+
+            <!-- Notes entry -->
+            <Label Text="Notes" FontAttributes="Bold" />
+            <Entry Placeholder="Notes"
+                   Text="{Binding FormNotes, Mode=TwoWay}" />
+
+            <!-- Income/expense toggle -->
+            <HorizontalStackLayout Spacing="10">
+                <CheckBox IsChecked="{Binding IsIncome, Mode=TwoWay}" />
+                <Label Text="Is Income?" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <!-- Date selection -->
+            <Label Text="Date" FontAttributes="Bold" />
+            <DatePicker Date="{Binding Date, Mode=TwoWay}" />
+
+            <!-- Action buttons -->
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+
+                <!-- Save changes (bound to SaveTransactionCommand) -->
+                <Button Text="Save"
+                        Command="{Binding SaveTransactionCommand}"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        WidthRequest="100" />
+
+                <!-- Delete transaction (bound to DeleteTransactionCommand) -->
+                <Button Text="Delete"
+                        Command="{Binding DeleteTransactionCommand}"
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        WidthRequest="100" />
+
+                <!-- Cancel and return (bound to CancelCommand) -->
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="Gray"
+                        TextColor="White"
+                        WidthRequest="100" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

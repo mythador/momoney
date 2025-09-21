@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  ReportsPage.xaml
+  
+  Displays financial reports for the user. Binds to ReportsViewModel, providing:
+    - Monthly summaries of income vs. expenses
+    - Category-based spending breakdown with chart and legend
+    - Budget utilization with progress tracking
+  Converters used:
+    - NetToColorConverter → colors net value labels based on positive/negative result
+    - ProgressToColorConverter → colors budget utilization progress bars
+    - RemainingToColorConverter → colors remaining/over budget text
+  Includes chart visualization via Microcharts and category-based legends.
+-->
+    
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             x:Class="MoMoney.Views.ReportsPage"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <!-- Monthly income vs. expenses summary -->
+            <Label Text="Monthly Income vs. Expenses" FontSize="18" FontAttributes="Bold" Margin="0,20,0,0" />
+            <CollectionView ItemsSource="{Binding MonthlySummaries}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Padding="0,0">
+                            
+                            <!-- Month -->
+                            <Label Text="{Binding Month}"
+                                FontAttributes="Italic"
+                                FontSize="14" />
+
+                            <!-- Income (green text) -->
+                            <Label Text="{Binding Income, StringFormat='Income: {0:C}'}"
+                                TextColor="Green"
+                                FontSize="12" />
+
+                            <!-- Expenses (red text) -->
+                            <Label Text="{Binding Expenses, StringFormat='Expenses: {0:C}'}"
+                                TextColor="Red"
+                                FontSize="12" />
+
+                            <!-- Net result (colored dynamically via NetToColorConverter) -->
+                            <Label Text="{Binding Net, StringFormat='Net: {0:C}'}"
+                               TextColor="{Binding Net, Converter={StaticResource NetToColorConverter}}"
+                               FontAttributes="Bold"
+                               FontSize="12" />
+
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Category spending breakdown -->
+            <Label Text="Spending by Category" FontSize="18" FontAttributes="Bold" Margin="0,20,0,0" />
+            <CollectionView ItemsSource="{Binding CategoryReports}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Category}" WidthRequest="150" />
+                            <Label Text="{Binding Amount, StringFormat='Spent: {0:C}'}" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Category spending chart -->
+            <microcharts:ChartView Chart="{Binding CategoryChart}"
+                       HeightRequest="200"
+                       HorizontalOptions="Center" />
+
+            <!-- Chart legend for categories -->
+            <CollectionView ItemsSource="{Binding CategoryReports}"
+                Margin="0,10,0,0"
+                SelectionMode="None"
+                HorizontalOptions="Center">
+
+                <!-- Two-column grid layout -->
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Legend entry -->
+                        <VerticalStackLayout Padding="5"
+                                 HorizontalOptions="Center">
+                            <HorizontalStackLayout Spacing="6">
+                                <BoxView WidthRequest="14" HeightRequest="14"
+                             Color="{Binding ColorHex}" />
+                                <Label Text="{Binding Category}" FontSize="12" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding Amount, StringFormat='{}{0:C}'}"
+                       FontSize="11"
+                       TextColor="Gray"
+                       Margin="20,0,0,0" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Budget utilization section -->
+            <Label Text="Budget Utilization" FontSize="18" FontAttributes="Bold"  Margin="0,20,0,0"/>
+            <CollectionView ItemsSource="{Binding BudgetReports}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Padding="0,5">
+                            
+                            <!-- Budget category -->
+                            <Label Text="{Binding Category}" FontAttributes="Bold" />
+
+                            <!-- Progress bar (colored dynamically via ProgressToColorConverter) -->
+                            <ProgressBar Progress="{Binding Progress}"
+                                 ProgressColor="{Binding ., Converter={StaticResource ProgressToColorConverter}}"
+                                 HeightRequest="10" />
+
+                            <!-- Spent of limit -->
+                            <Label Text="{Binding SpentOfLimit}" FontSize="12" TextColor="Gray" />
+
+                            <!-- Remaining / Over (colored via RemainingToColorConverter) -->
+                            <Label Text="{Binding Remaining}"
+                               FontSize="12"
+                               TextColor="{Binding Remaining, Converter={StaticResource RemainingToColorConverter}}" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- FUTURE ENHANCEMENT - ABILITY TO ACCESS LOGGER FILE FROM THIS PAGE-->
+            
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+

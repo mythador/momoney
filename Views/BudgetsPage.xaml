@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  BudgetsPage.xaml
+  
+  Displays a list of budgets with category, amount, and period details.
+  Each budget shows a progress bar for utilization, styled via converters:
+    - ProgressToColorConverter → dynamically colors the progress bar
+    - SpentToTextColorConverter → adjusts text color based on spending
+  Includes edit functionality for each budget and a floating action button
+  to add a new budget.
+-->
+    
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:MoMoney.Converters"
+             x:Name="BudgetsPageRoot"
+             x:Class="MoMoney.Views.BudgetsPage"
+             Title="{Binding Title}">
+
+    <!-- Page resources -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- Converter for coloring progress bars based on spending -->
+            <converters:ProgressToColorConverter x:Key="ProgressToColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="0.9*,0.1*" Padding="20">
+
+        <!-- Budget list -->
+        <CollectionView Grid.Row="0"
+                        ItemsSource="{Binding Budgets}"
+                        SelectionMode="None">
+            
+            <!-- Header -->
+            <CollectionView.Header>
+                <Label Text="Budgets"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       Margin="0,5,0,5" />
+            </CollectionView.Header>
+
+            <!-- Template for each budget item -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10"
+                           Margin="0,0,0,8"
+                           BorderColor="LightGray"
+                           CornerRadius="8"
+                           HasShadow="False">
+
+                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+
+                            <!-- Budget Details -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="{Binding Category}"
+                                       FontSize="16"
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding Amount, StringFormat='Budget: {0:C}'}"
+                                       FontSize="14" />
+                                <Label Text="{Binding Period}"
+                                       FontSize="13"
+                                       TextColor="Gray" />
+
+                                <!-- Progress bar (colored dynamically via ProgressToColorConverter) -->
+                                <ProgressBar Progress="{Binding Progress}"
+                                     ProgressColor="{Binding ., Converter={StaticResource ProgressToColorConverter}}"
+                                     HeightRequest="6"
+                                     Margin="0,4,0,0"
+                                     VerticalOptions="Center" />
+
+                                <!-- Progress text (text color bound via SpentToTextColorConverter) -->
+                                <Label Text="{Binding ProgressText}"
+                                       TextColor="{Binding Spent, Converter={StaticResource SpentToTextColorConverter}, ConverterParameter={Binding Amount}}"
+                                       FontSize="12"
+                                       Margin="0,2,0,0" />      
+                            </VerticalStackLayout>
+
+                            <!-- Edit budget button (bound to EditBudgetCommand) -->
+                            <Frame Grid.Column="1"
+                                   WidthRequest="40"
+                                   HeightRequest="40"
+                                   CornerRadius="20"
+                                   Padding="6"
+                                   BackgroundColor="#E3F2FD"
+                                   HasShadow="False"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center">
+                                <ImageButton Source="editicon.png"
+                                             BackgroundColor="Transparent"
+                                             HeightRequest="24"
+                                             WidthRequest="24"
+                                             Command="{Binding BindingContext.EditBudgetCommand, Source={x:Reference BudgetsPageRoot}}"
+                                             CommandParameter="{Binding .}" />
+                            </Frame>
+
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Floating Action Button (FAB) to add a new budget) -->
+        <VerticalStackLayout Grid.Row="1"
+                             VerticalOptions="Start"
+                             HorizontalOptions="Center"
+                             Padding="0,10,0,0">
+            <Button Text="+"
+                    Style="{StaticResource BudgetFloatingActionButton}"
+                    Command="{Binding GoToAddBudgetCommand}" />
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

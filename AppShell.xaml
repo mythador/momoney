@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  AppShell.xaml
+  
+  Defines the overall navigation structure of the MoMoney application
+  using .NET MAUI Shell. Provides tabbed navigation for the main pages
+  (Home, Transactions, Budgets, Reports) and routes for additional pages.
+-->
+<Shell
+    x:Class="MoMoney.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MoMoney"
+    xmlns:views="clr-namespace:MoMoney.Views"
+    Title="MoMoney">
+
+    <!--
+      TabBar
+      
+      Primary navigation tabs for the main sections of the app.
+      Each ShellContent defines a page with an icon and route.
+    -->
+    <TabBar>
+        
+        <!-- Home Page -->
+        <ShellContent
+            Title="Home"
+            Icon="homeicon.png"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+
+        <!-- Transactions Page -->
+        <ShellContent
+            Title="Transactions"
+            Icon="transactionicon.png"
+            ContentTemplate="{DataTemplate views:TransactionsPage}"
+            Route="TransactionsPage" />
+
+        <!-- Budgets Page -->
+        <ShellContent
+            Title="Budgets"
+            Icon="budgeticon.png"
+            ContentTemplate="{DataTemplate views:BudgetsPage}"
+            Route="BudgetsPage" />
+
+        <!-- Reports Page -->
+        <ShellContent
+            Title="Reports"
+            Icon="reporticon.png"
+            ContentTemplate="{DataTemplate views:ReportsPage}"
+            Route="ReportsPage" />
+
+    </TabBar>
+
+    <!--
+      Additional Routes
+      
+      Non-tabbed routes that can be navigated to programmatically.
+      These do not appear in the tab bar.
+    -->
+    <ShellContent
+            Title="Add Transaction"
+            ContentTemplate="{DataTemplate views:AddTransactionPage}"
+            Route="AddTransactionPage"
+            IsVisible="False" />
+
+</Shell>

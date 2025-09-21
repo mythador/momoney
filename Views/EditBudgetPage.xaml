@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+    
+<!--
+  EditBudgetPage.xaml
+  
+  Provides a form for editing an existing budget.
+  Binds to EditBudgetViewModel, supporting:
+    - Updating category, amount, and period
+    - Saving changes
+    - Deleting the budget
+    - Cancelling and returning without changes
+  Uses CurrencyConverter for formatting the budget amount field.
+-->
+    
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoMoney.Views.EditBudgetPage"
+             Title="Edit Budget">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Page Heading -->
+            <Label Text="Budget Details"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10" />
+
+            <!-- Category selection -->
+            <Label Text="Category" FontSize="14" />
+            <Picker Title="Select Category"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding FormCategory, Mode=TwoWay}" />
+
+            <!-- Amount entry (numeric input, formatted using CurrencyConverter) -->
+            <Label Text="Amount" FontSize="14" />
+            <Entry Placeholder="Enter amount"
+                   Keyboard="Numeric"
+                   Text="{Binding FormAmount, Mode=TwoWay, Converter={StaticResource CurrencyConverter}}" />
+
+            <!-- Period entry -->
+            <Label Text="Period" FontSize="14" />
+            <Entry Placeholder="e.g. Monthly"
+                   Text="{Binding FormPeriod, Mode=TwoWay}" />
+
+            <!-- Action buttons -->
+            <HorizontalStackLayout Spacing="15" Margin="0,20,0,0">
+
+                <!-- Save changes (bound to SaveBudgetCommand) -->
+                <Button Text="Save"
+                        Command="{Binding SaveBudgetCommand}"
+                        BackgroundColor="#2E7D32"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HorizontalOptions="FillAndExpand" />
+
+                <!-- Delete budget (bound to DeleteBudgetCommand) -->
+                <Button Text="Delete"
+                        Command="{Binding DeleteBudgetCommand}"
+                        BackgroundColor="#D32F2F"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HorizontalOptions="FillAndExpand" />
+
+                <!-- Cancel and return (bound to CancelCommand) -->
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="LightGray"
+                        TextColor="Black"
+                        CornerRadius="8"
+                        HorizontalOptions="FillAndExpand" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

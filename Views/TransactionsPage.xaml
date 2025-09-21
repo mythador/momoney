@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  TransactionsPage.xaml
+  
+  Displays a list of financial transactions.
+  Binds to TransactionViewModel, supporting:
+    - Viewing transaction details (category, amount, date, notes)
+    - Editing existing transactions via an edit button
+    - Adding new transactions via a floating action button (FAB)
+-->
+    
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="TransactionsPageRoot"
+             x:Class="MoMoney.Views.TransactionsPage"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="0.9*,0.1*" Padding="20">
+
+        <!-- Transaction list (occupies 90% of the screen) -->
+        <CollectionView Grid.Row="0"
+                        ItemsSource="{Binding Transactions}"
+                        SelectionMode="None">
+
+            <!-- Header -->
+            <CollectionView.Header>
+                <Label Text="Transactions"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       Margin="0,5,0,5" />
+            </CollectionView.Header>
+
+            <!-- Template for each transaction item -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="5" Margin="0,0,0,8"
+                           BorderColor="LightGray"
+                           CornerRadius="5"
+                           HasShadow="False">
+                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+
+                            <!-- Transaction Details -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="{Binding Category}" FontSize="14" FontAttributes="Bold" />
+                                <Label Text="{Binding Amount, StringFormat='Amount: {0:C}'}" FontSize="12" />
+                                <Label Text="{Binding Date, StringFormat='Date: {0:d}'}" FontSize="12" />
+                                <Label Text="{Binding Notes}" FontAttributes="Italic" FontSize="10" />
+                            </VerticalStackLayout>
+
+                            <!-- Edit button (tap gesture triggers EditTransactionCommand) -->
+                            <Frame Grid.Column="1"
+                                   WidthRequest="36"
+                                   HeightRequest="36"
+                                   CornerRadius="18"
+                                   Padding="6"
+                                   BackgroundColor="#E3F2FD"
+                                   HasShadow="False"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center">
+                                <Image Source="editicon.png"
+                                       HeightRequest="20"
+                                       WidthRequest="20">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.EditTransactionCommand, Source={x:Reference TransactionsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Frame>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Floating Action Button (FAB) for adding new transactions -->
+        <VerticalStackLayout Grid.Row="1"
+                             VerticalOptions="Start"
+                             HorizontalOptions="Center"
+                             Padding="0,10,0,0">
+            <Button Text="+"
+                    Style="{StaticResource FloatingActionButton}"
+                    Command="{Binding GoToAddTransactionCommand}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

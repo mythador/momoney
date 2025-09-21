@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  AddTransactionPage.xaml
+
+  Provides a form for creating a new financial transaction.
+  Binds to AddTransactionViewModel, supporting:
+    - Transaction date selection
+    - Category selection or creation
+    - Amount entry (with currency formatting)
+    - Notes entry
+    - Income/expense toggle
+    - Save / Cancel actions
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoMoney.Views.AddTransactionPage"
+             Title="Add Transaction">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Transaction date selection -->
+            <Label Text="Date" FontAttributes="Bold" />
+            <DatePicker Date="{Binding Date, Mode=TwoWay}"
+                        Format="MM/dd/yyyy"
+                        HorizontalOptions="Fill" />
+
+            <!-- Category selection -->
+            <Label Text="Category" FontAttributes="Bold" />
+            <Picker Title="Select Category"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory}" />
+
+            <!-- Add new category (bound to AddCategoryCommand) -->
+            <HorizontalStackLayout Spacing="10">
+                <Entry x:Name="NewCategoryEntry"
+                       Placeholder="Add new category"
+                       HorizontalOptions="FillAndExpand" />
+                <Button Text="Add"
+                        Command="{Binding AddCategoryCommand}"
+                        CommandParameter="{Binding Text, Source={x:Reference NewCategoryEntry}}" />
+            </HorizontalStackLayout>
+
+            <!-- Transaction amount entry (numeric input, formatted using CurrencyConverter) -->
+            <Label Text="Amount" FontAttributes="Bold" />
+            <Entry Placeholder="0.00"
+                   Keyboard="Numeric"
+                   Text="{Binding FormAmount, Mode=TwoWay, Converter={StaticResource CurrencyConverter}}" />
+
+            <!-- Transaction notes -->
+            <Label Text="Notes" FontAttributes="Bold" />
+            <Entry Placeholder="Notes"
+                   Text="{Binding FormNotes, Mode=TwoWay}" />
+
+            <!-- Income/expense toggle -->
+            <HorizontalStackLayout Spacing="10">
+                <CheckBox IsChecked="{Binding IsIncome, Mode=TwoWay}" />
+                <Label Text="Is Income?" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <!-- Action buttons -->
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                
+                <!-- Save button - bound to AddTransactionCommand -->
+                <Button Text="Save"
+                        Command="{Binding AddTransactionCommand}"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="10"
+                        WidthRequest="120"/>
+
+                <!-- Cancel button - bound to CancelCommand -->
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="Gray"
+                        TextColor="White"
+                        CornerRadius="10"
+                        WidthRequest="120"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

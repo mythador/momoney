@@ -1,0 +1,32 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+  App.xaml
+  
+  Defines global application-level resources for MoMoney.
+  This includes:
+    - Merged resource dictionaries for colors and styles
+    - Value converters for data binding (currency, progress, net, spent, remaining)
+-->
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:MoMoney.Converters"
+             xmlns:local="clr-namespace:MoMoney"
+             x:Class="MoMoney.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            
+            <!-- Shared color and style resources -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Global converters available across the app -->
+            <converters:CurrencyConverter x:Key="CurrencyConverter" />
+            <converters:ProgressToColorConverter x:Key="ProgressToColorConverter" />
+            <converters:NetToColorConverter x:Key="NetToColorConverter" />
+            <converters:SpentToTextColorConverter x:Key="SpentToTextColorConverter" />
+            <converters:RemainingToColorConverter x:Key="RemainingToColorConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
